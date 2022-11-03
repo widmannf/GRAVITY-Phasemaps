@@ -10,11 +10,12 @@ The aberration maps have to be created for each wavelength individually and they
 wave = [2., 2.25, 2.5]
 pm = Phasemaps(wave, 'AT')
 ```
+
 If the phasemaps should be used for fitting they need to be created for each wavelength channel. In this case the wavelengths can be taken from a GRAVITY fits file:
 ```python
 wave = fits.open(file)['OI_WAVELENGTH'].data['EFF_WAVE']
 pm = Phasemaps(wave, 'AT')
-```python
+```
 
 ## Creating maps
 The maps are then simply created and optionally plotted with:
