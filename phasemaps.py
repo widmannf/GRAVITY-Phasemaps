@@ -279,41 +279,49 @@ class Phasemaps():
             fov *= 4.4
 
         fs = plt.rcParams['figure.figsize']
-        fig1, ax1 = plt.subplots(2,2, sharex=True, sharey=True,
-                                 figsize=(fs[0], fs[0]))
-        fig2, ax2 = plt.subplots(2,2, sharex=True, sharey=True,
-                                 figsize=(fs[0], fs[0]))
-        ax1 = ax1.flatten()
-        ax2 = ax2.flatten()
-
+        fig, ax = plt.subplots(2,2, sharex=True, sharey=True,
+                               figsize=(fs[0], fs[0]))
+        ax = ax.flatten()
         pltargsP = {'origin':'lower', 'cmap':'twilight_shifted',
                     'extent': [fov/2, -fov/2, -fov/2, fov/2],
                     'levels':np.linspace(-180, 180, 19, endpoint=True)}
-        pltargsA = {'origin':'lower', 'vmin':0, 'vmax':1,
-                    'extent': [fov/2, -fov/2, -fov/2, fov/2]}
-
         for io, img in enumerate(aberration_maps):
             img = np.flip(img, axis=1)[20:-20,20:-20]
             _phase = np.angle(img, deg=True)
             _phase = cut_circle(_phase, fov)
-            imP = ax1[io].contourf(_phase, **pltargsP)
+            imP = ax[io].contourf(_phase, **pltargsP)
+            ax[io].set_aspect('equal')
+
+        fig.subplots_adjust(right=0.9)
+        cbar_ax = fig.add_axes([0.95, 0.25, 0.05, 0.5])
+        fig.colorbar(imP, cax=cbar_ax, label='Phase [deg]')
+        fig.add_subplot(111, frameon=False)
+        plt.tick_params(labelcolor='none', which='both',
+                         top=False, bottom=False, left=False, right=False)
+        plt.xlabel('Image plane x-cooridnate [mas]')
+        plt.ylabel('Image plane y-cooridnate [mas]\n')
+        plt.show()
+
+        fig, ax = plt.subplots(2,2, sharex=True, sharey=True,
+                               figsize=(fs[0], fs[0]))
+        ax = ax.flatten()
+        pltargsA = {'origin':'lower', 'vmin':0, 'vmax':1,
+                    'extent': [fov/2, -fov/2, -fov/2, fov/2]}
+        for io, img in enumerate(aberration_maps):
+            img = np.flip(img, axis=1)[20:-20,20:-20]
             _amp = np.abs(img)
             _amp = cut_circle(_amp, fov)
-            imA = ax2[io].imshow(_amp, **pltargsA)
-            ax1[io].set_aspect('equal')
-            ax2[io].set_aspect('equal')
-            
-        fig1.subplots_adjust(right=0.9)
-        cbar_ax = fig1.add_axes([0.95, 0.25, 0.05, 0.5])
-        fig1.colorbar(imP, cax=cbar_ax, label='Phase [deg]')
-        fig1.supxlabel('Image plane x-cooridnate [mas]')
-        fig1.supylabel('Image plane y-cooridnate [mas]')
+            imA = ax[io].imshow(_amp, **pltargsA)
+            ax[io].set_aspect('equal')
 
-        fig2.subplots_adjust(right=0.9)
-        cbar_ax = fig2.add_axes([0.95, 0.25, 0.05, 0.5])
-        fig2.colorbar(imA, cax=cbar_ax, label='Fiber Throughput')
-        fig2.supxlabel('Image plane x-cooridnate [mas]')
-        fig2.supylabel('Image plane y-cooridnate [mas]')
+        fig.subplots_adjust(right=0.9)
+        cbar_ax = fig.add_axes([0.95, 0.25, 0.05, 0.5])
+        fig.colorbar(imA, cax=cbar_ax, label='Fiber Throughput')
+        fig.add_subplot(111, frameon=False)
+        plt.tick_params(labelcolor='none', which='both',
+                         top=False, bottom=False, left=False, right=False)
+        plt.xlabel('Image plane x-cooridnate [mas]')
+        plt.ylabel('Image plane y-cooridnate [mas]\n')
         plt.show()
 
     def rotation(self, ang):
