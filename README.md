@@ -3,6 +3,11 @@ Script to create aberration maps for the VLTI instrument GRAVITY
 
 The need and implementation is described in: [A&A 647, A59 (2021)](https://www.aanda.org/articles/aa/pdf/2021/03/aa40208-20.pdf)
 
+## Requirements
+The code requires the following packages and is tested with the given versions:
+```python
+Python 3 (>=3.7), numpy(1.23.4), matplotlib(3.4), astropy(5.1.1), joblib (1.2.0), scipy(1.9.3)
+```
 
 ## Set-up of class
 The aberration maps have to be created for each wavelength individually and they are different for ATs & UTs. Both the wavelengths and the telescope have to be declared on initialization:
